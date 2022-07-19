@@ -1,1 +1,54 @@
-Hello, world.
+<!doctype html>
+<html>
+  <head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Colour mixer</title>
+    <style>
+      body {
+        font-family: monospace;
+        font-size: 14px;
+        max-width: 45em;
+        margin: 0 auto;
+        padding: 1em 2em;
+      }
+      h1 {
+        text-align: center;
+      }
+      table {
+        margin: 1em 0;
+      }
+      #patch {
+        border: thin lightgray solid;
+        height: 10em;
+        line-height: 10em;
+        margin-top: 0.5em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body onload="show()">
+    <h1>Colour mixer</h1>
+    <p>Every colour is a mixture of red, green, and blue - the three primary colours. Use the sliders below to mix colours by setting the amount of each:</p>
+    <table>
+      <tr>
+        <td>Red:</td>
+        <td>0</td>
+        <td><input id="red" type="range" min="0" max="255" step="1" value="140" oninput="show()"/></td>
+        <td>255</td>
+      </tr>
+      <tr>
+        <td>Green:</td>
+        <td>0</td>
+        <td><input id="green" type="range" min="0" max="255" step="1" value="255" oninput="show()"/></td>
+        <td>255</td>
+      </tr>
+      <tr>
+        <td>Blue:</td>
+        <td>0</td>
+        <td><input id="blue" type="range" min="0" max="255" step="1" value="240" oninput="show()"/></td>
+        <td>255</td>
+      </tr>
+    </table>
+    <div id="patch"></div>
+  </body>
+</html>
