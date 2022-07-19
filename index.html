@@ -50,5 +50,20 @@
       </tr>
     </table>
     <div id="patch"></div>
+    <script>
+	function show() {
+	  let red = document.getElementById("red").value;
+	  let green = document.getElementById("green").value;
+	  let blue = document.getElementById("blue").value;
+	  let patch = document.getElementById("patch");
+	  patch.style.backgroundColor = `rgb(${red},${green},${blue})`;
+	  patch.style.color = bestColor(red, green, blue);
+	  patch.innerHTML = `rgb(${red},${green},${blue})`;
+	}
+	function bestColor(r, g, b){
+	  let yiq = ((r*299) + (g*587) + (b*114))/1000;
+	  return (yiq >= 128) ? "black" : "white";
+	}
+    </script>
   </body>
 </html>
