@@ -1,0 +1,1393 @@
+<!doctype html> 
+<html>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+	<title>Tutorial: LaTeX</title>
+	<style>
+/* Fonts */
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400&display=swap');
+
+/* Variables */
+:root {
+	--font-family: Roboto;
+	--font-size: 14pt;
+	--font-weight: normal;
+	--code-font-family: 'Source Code Pro';
+	--banner-height: 60px;
+	--banner-background-color: black;
+	--banner-color: white;
+	--banner-font-size: calc(var(--banner-height)/2);
+	--nav-width: 350px;
+	--nav-background-color: whitesmoke;
+	--nav-gap-height: 1em;
+	--nav-item-background-color: var(--nav-background-color);
+	--nav-item-color: blue;
+	--nav-item-selected-background-color: var(--page-background-color);
+	--nav-item-selected-color: var(--nav-item-color);
+	--main-background-color: white;
+	--page-background-color: white;
+	--page-max-width: none;
+	--page-line-height: 1.4;
+	--page-gap-height: 1em;
+	--outline-color: black;
+}
+
+@media all {
+	/** All **/
+	* {font-size: inherit; font-weight: inherit; position: relative; /*tab-size: 2; -moz-tab-size: 2; -o-tab-size: 2*/}
+	
+	/** Body **/
+	body {font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight)}
+	
+	/** Main **/
+	main {text-align: center}
+	
+	/** Pages **/
+	.page {background-color: white; line-height: var(--page-line-height)}
+	body.public .page {display: none}
+	.page-name {font-size: 240%; text-align: left; margin: 0 0 0.75em 0}
+
+	/** Widgets **/
+	.widget {min-height: 1em; display: block; box-sizing: border-box; margin: 0; width: 100%; /*overflow: hidden*/}
+	.widget :first-child {margin-top: 0}
+	.widget :last-child {margin-bottom: 0}
+	
+	/*
+	.widget.code pre {text-align: left; padding: 0.5em 1em; background-color: rgb(250,250,250); margin: 1em 0; white-space: pre-wrap}
+	*/
+	.widget.code {border: thin lightgray solid}
+	.widget.code pre {margin: 0}
+	.widget.code header {background-color: var(--nav-background-color); text-align: left; padding: 0.25em; border-bottom: thin lightgray solid; color: gray}
+	.widget.code button {float: right; color: var(--nav-item-color); background-color: inherit; border: thin var(--nav-item-color) solid; cursor: pointer; border-radius: 0.2em; margin-left: 0.5em}
+	.widget.code button:focus {outline: none}
+	.widget.code button.clear {display: none}
+	.widget.code.runnable textarea {display: block; box-sizing: border-box; width: 100%; resize: none; border: none; padding: 0.5em; font-family: var(--code-font-family)}
+	/*
+	.widget.code.runnable textarea:focus {outline: none}
+	*/
+	.widget.code output {display: none; border-top: thin lightgray solid; padding: 0.5em; text-align: left; overflow-y: hidden; overflow-x: scroll; font-family: var(--code-font-family); white-space: pre-wrap}
+	.widget.code[data-language='latex'],
+	.widget.code[data-language='markdown'] output {font-family: var(--font-family); white-space: normal}
+	.widget.code[data-language='html'] output {padding: 0}
+	
+	.widget.pivot pre {margin: 0}
+	.widget.pivot table {width: 100%}
+	.widget.pivot td.l {text-align: left}
+	.widget.pivot td.r {text-align: right}
+	.widget.pivot td.c {text-align: center}
+	.widget.pivot td.j {text-align: justify}
+	
+	.comments {margin-left: 2em/*border: thin red solid*/}
+	.comments .widget.text {background-color: rgb(240,240,240); padding: 0.5em; border-radius: 1em; text-align: left; margin: 1em 0}
+	.comments .widget.text i.material-icons {position: absolute; font-size: 140%; top: 0.4em; left: -1.5em}
+	.comments .widget.text .person {font-weight: bold}
+	.comments .widget.text .info {font-size: 80%; text-align: right}
+	.comments .comments  {margin-left: 2em}
+	.comments .gap.can-edit {border: thin gray solid}
+	
+  div.callout {text-align: justify; padding: 1em 2em; background-color: rgb(245,245,245); border-radius: 1em}
+	.group {border: thin lightgray solid; padding: 0 1em}
+	.group .widget {display: inline-block; width: 100%; vertical-align: top; box-sizing: border-box}
+	.highchart {height: 20em}
+	.highchart .options {display: none}
+	.highchart .result {box-sizing: border-box; height: 100%}
+	.wordcloud {height: 20em}
+	.link {text-align: left}
+	.webpage {height: 20em}
+	.webpage iframe {height: 100%; border: thin lightgray solid}
+	/*
+	table.question {width: 100%}
+  table.question td {text-align: left; vertical-align: top; border: none; padding-left: 0}
+  table.question td.num {width: 1.2em}
+  table.question tbody.parts {border-top: 0.25em white solid; border-bottom: 0.75em white solid}
+  table.question div.answer {margin-top: 0.4em; background-color: white; padding: 0.75em; border: medium gray solid; border-radius: 0.5em;}
+	table.answers {width: 100%}
+  table.answers td {text-align: left; vertical-align: top; border: none; padding-left: 0}
+  table.answers td.num {width: 1.2em}
+  */
+	.widget.question {display: list-item; list-style-type: decimal; margin-left: 1em; padding-left: 0.5em; text-align: left; width: auto}
+	.widget.question .widget.question {list-style-type: lower-alpha}
+	.widget.question details > summary {color: blue}
+	.widget.question details > summary::marker {content: ''}
+	
+	.widget.flashcards {border: thin lightgray solid}
+	.widget.flashcards header,
+	.widget.flashcards footer {background-color: var(--nav-background-color); text-align: left; height: 1em; line-height: 1em; padding: 0.5em; color: gray}
+	.widget.flashcards header {border-bottom: thin lightgray solid}
+	.widget.flashcards footer {border-top: thin lightgray solid}
+	.widget.flashcards button {display: inline-block; color: var(--nav-item-color); background-color: inherit; border: thin var(--nav-item-color) solid; cursor: pointer; border-radius: 0.2em; top: -0.2em}
+	.widget.flashcards header button {float: right; margin-left: 0.5em}
+	.widget.flashcards button:focus {outline: none}
+	.widget.flashcards .back,
+	.widget.flashcards .forward {background-color: var(--banner-background-color); color: var(--banner-color); border: none}	
+	.widget.flashcards table {width: 100%; border: none}
+	.widget.flashcards td {border: none; width: 50%; text-align: left; vertical-align: middle; font-size: 100%}
+	.widget.flashcards td + td {border-left: thin lightgray solid}
+	.widget.flashcards tr + tr td {border-top: thin lightgray solid}
+	.widget.flashcards table.practice {height: 10em}
+	.widget.flashcards table.practice td {display: none; text-align: center; font-size: 200%; border: none}
+	.widget.flashcards table.practice td.active {display: table-cell; width: 100%; height: 100%}
+	.widget.flashcards .min,
+	.widget.flashcards .max {display: inline-block; width: 2em; height: 1em; line-height: 1em; vertical-align: top; text-align: center}	
+	.widget.flashcards progress {display: inline-block; width: calc(100% - 8em); color: var(--banner-background-color)}
+	
+	.widget.file {width: 100%; text-align: left}
+	.widget.file img {display: inline-block; width: 3em; height: 3em; vertical-align: middle}
+  .widget.file .fileDetails {display: inline-block; box-sizing: border-box; max-width: calc(100% - 3.5em); padding: 0.5em; vertical-align: middle}
+  .widget.file .fileDetails summary {text-align: left}
+  .widget.file .fileDetails p {display: block; margin: 0.5em 0 0 0; text-align: justify; line-height: 1.2em}
+  .arg {border-collapse: collapse; margin-left: 2em}
+  .arg td {border: none; padding: 0.1em 0.3em; text-align: left; vertical-align: top}
+  .arg td.provenance {white-space: nowrap}
+	
+	/*.widget.hidden {opacity: 0.2}*/
+	
+	/** Gaps **/
+	.widget.question .gap {padding: 0; height: 1em; line-height: 1em; margin: -0.25em 0; z-index: 2}
+	.page .gap {height: var(--page-gap-height); line-height: var(--page-gap-height)}
+	* + .gap {margin-top: 0}
+	.page-name + .gap {margin-top: calc(-1 * var(--page-gap-height))}
+	
+	/** Elements **/
+	a {text-decoration: none}
+	b {font-weight: bold}
+	audio {width: 100%}
+  blockquote {text-align: justify}
+	code {font-family: var(--code-font-family)}
+	del {text-decoration: line-through}
+	figure {width: 100%; margin: 0; padding: 0; vertical-align: top}
+  .widget img,
+  .widget svg,
+  .widget iframe {display: inline-block; width: 100%; margin: 0; vertical-align: top; box-sizing: border-box}
+  .widget.webpage.location-code iframe {height: 100%}
+  figcaption {display: inline-block; vertical-align: top; text-align: justify; box-sizing: border-box}
+  h1 {text-align: left; font-size: 150%; font-weight: bold}
+  h2 {text-align: left; font-size: 140%; font-weight: bold}
+  h3 {text-align: left; font-size: 130%; font-weight: bold}
+  h4 {text-align: left; font-size: 120%; font-weight: bold}
+  h5 {text-align: left; font-size: 110%; font-weight: bold}
+  h6 {text-align: left; font-size: 100%; font-weight: bold}
+  hr {border: thin solid lightgray; margin-top: 1em}
+	i {font-style: italic}
+	i.material-icons {vertical-align: middle; font-size: inherit; top: -0.08em}
+  iframe {border: none /*thin lightgray solid*/;} /*width: 100%; height: 20em; vertical-align: bottom*/
+  img {max-height: 100%; max-width: 100%; vertical-align: bottom}
+  label {display: block; text-align: left; font-weight: bold}
+  li {text-align: justify}
+  p {text-align: justify}
+	p.center {text-align: center}
+  strong {font-weight: bold}
+  table {border-collapse: collapse; margin: 0 auto}
+  table td {padding: 0.2em; border: thin gray solid}
+	.cannot-see {filter: blur(0.25em)}
+  /*ul.plain {list-style: none}*/
+  ul.plain.bib {padding-left: 0}
+  ul.plain.bib li {text-align: left; text-indent: -2em; padding-left: 2em}
+	
+	/** Maths **/
+	/*
+  .sqrt {display: inline-block; line-height: 1em; vertical-align: baseline; padding-left: 0.5em}
+  .sqrt > span {display: inline-block; border-top: thin black solid; padding: 0 0.2em}
+  .sqrt > svg {position: absolute; left: 0; height: 100%; width: 0.5em; fill: none; stroke: black; stroke-width: 1px}
+  */
+  .fenced {display: inline-block; padding-left: 0.4em; padding-right: 0.5em; margin: 0 auto}
+  .fenced > svg {fill: none; stroke: black; stroke-width: 1px}
+  .fenced > svg:first-of-type {position: absolute; left: 0; height: 100%; width: 0.5em}
+  .fenced > svg:last-of-type {position: absolute; right: 0; height: 100%; width: 0.5em}
+  .frac {display: inline-block; vertical-align: middle}
+  .frac .numerator {display: block; text-align: center; padding-bottom: 0.1em; border-bottom: thin black solid}
+  .frac .denominator{display: block; text-align: center; padding-top: 0.1em}
+  .sup {display: inline-block; /*padding-top: 0.3em*/} /*Temporarily blanked - it will muck up the maths*/
+  .sup > span:nth-child(2) {vertical-align: top; top: -0.3em; font-size: 90%}
+  .sub {display: inline-block; /*padding-bottom: 0.3em*/} /*Ditto*/
+  .sub > span:nth-child(2) {vertical-align: bottom; bottom: -0.3em; font-size: 90%}
+	.table {display: inline-table; border-collapse: collapse; margin: 0 auto}
+  .matrix {display: inline-table; vertical-align: middle; margin: 0}
+	.row {display: table-row}
+  .cell {display: table-cell; border: none; text-align: center; vertical-align: middle}
+	.table .cell {border: thin gray solid}
+  math[display=block] {margin: 1em 0}
+  mtd {padding: 0.2em}
+	
+	/** Other **/
+  .callout {margin-top: 1em; text-align: justify; padding: 1em 2em; background-color: rgb(245,245,245); border-radius: 1em}
+	.input {white-space: pre-wrap}
+  .toggle {padding: 1em 1.5em; border-radius: 1em; cursor: pointer; text-align: left; border: thin blue solid; margin-top: 1em}
+  .toggle div {display: none; text-align: left}
+  .toggle div.on {display: block}
+  .arg {margin-left: 2em}
+  .arg td {border: none; padding: 0.1em 0.3em; text-align: left; vertical-align: top}
+  .arg td.provenance {white-space: nowrap}
+}
+
+@media screen {
+	/** Banner **/
+	#banner {position: fixed; top: 0; left: 0; right: 0; height: var(--banner-height); line-height: var(--banner-height); font-size: var(--banner-font-size); text-align: left; border: none; background-color: var(--banner-background-color); color: var(--banner-color); z-index: 2; overflow: hidden; white-space: nowrap}
+  #icon {box-sizing: border-box; height: var(--banner-height); line-height: var(--banner-height); width: var(--banner-height); vertical-align: top; object-fit: contain; border-radius: 50%; background-color: inherit; color: inherit}
+  #hamburger {height: var(--banner-height); line-height: var(--banner-height); width: var(--banner-height); box-sizing: border-box; font-size: var(--banner-font-size); background-color: var(--banner-color); color: var(--banner-background-color); cursor: pointer; text-align: center; vertical-align: top; top: 0}
+  #site-name {display: inline-block; height: var(--banner-height); line-height: var(--banner-height); color: inherit; font-size: var(--banner-font-size); vertical-align: text-bottom; margin-left: 0.4em}
+  #actions {position: absolute; top: 0; right: 0; height: var(--banner-height); text-align: center; padding-left: 0.5em; background-color: inherit; z-index: 2; font-size: var(--banner-font-size)}
+	#actions a i.material-icons {display: inline-block; box-sizing: border-box; font-size: var(--banner-font-size); text-align: center; vertical-align: middle; padding: 0.2em; border-radius: 100%; margin: 0.2em; color: var(--banner-color)}
+	#actions a.on i.material-icons {background-color: var(--banner-color); color: var(--banner-background-color) !important}
+	
+	/** Nav **/
+	#nav {position: fixed; box-sizing: border-box; left: 0; width: var(--nav-width); max-width: 80%; top: var(--banner-height); bottom: 0; padding: 15px 0 15px 10px; background-color: var(--nav-background-color); overflow-y: auto}
+	.nav-item {padding: 0.4em 0 0.4em 0.4em; cursor: pointer; background-color: var(--nav-item-background-color); color: var(--nav-item-color)}
+	.nav-item.on {background-color: var(--nav-item-selected-background-color); color: var(--nav-item-selected-color)}
+	#nav .gap {cursor: pointer; padding: 0; height: 1em; line-height: 1em; margin: -0.5em 0; z-index: 2}
+	body.private .nav-item:hover {outline: thin var(--outline-color) dashed; z-index: 3}
+	body.private .nav-item[data-flags]:before {content: attr(data-flags); font-size: 80%; width: 1.6em; height: 1.6em; line-height: 1.6em; border-radius: 1.6em; background-color: dodgerblue; color: white; float: right; text-align: center; vertical-align: middle}
+	body.private #nav .gap:hover {outline: thin var(--outline-color) dashed; z-index: 3}
+	body.private #nav .selected {outline: medium var(--outline-color) dashed; z-index: 5}
+	body.private #nav .selected:hover {outline: medium var(--outline-color) dashed; z-index: 5}
+	body.private #nav .selected.copy {outline-color: green}
+	body.private #nav .selected.cut {outline-color: red}
+	
+	/** Main **/
+	main {position: fixed; top: var(--banner-height); right: 0; bottom: 0; padding: 0; background-color: var(--main-background-color); text-align: center; overflow-y: auto}
+	
+	/** Home **/
+	.site.selected {outline: medium var(--outline-color) dashed; z-index: 3}
+	
+	/** Pages **/
+	.page {display: block; width: 100%; max-width: var(--page-max-width); min-height: 100%; margin: 0 auto; padding: 1.5em min(4em, 5vw); box-sizing: border-box}
+	
+	/** Gaps **/
+	body.private .gap {cursor: pointer}
+	body.private .gap:hover {outline: thin var(--outline-color) dashed; z-index: 2}
+	body.private .gap.selected {outline: medium var(--outline-color) dashed; z-index: 3}
+	body.private .gap.selected:hover {outline-width: medium}
+	
+	/** Widgets **/
+	body.private .widget {cursor: pointer}
+	body.private .widget:hover {outline: thin var(--outline-color) dashed; z-index: 2}
+	body.private .widget.selected {outline: medium var(--outline-color) dashed; z-index: 3}
+	body.private .widget.selected:hover {outline-width: medium}
+	body.private .widget.selected.copy {outline-color: green}
+	body.private .widget.selected.cut {outline-color: red}
+	
+	body.private .widget.group {padding: 1em}
+	body.private .widget.question td {outline: thin var(--outline-color) dashed !important; padding: 0.2em 0}
+	body.private .widget[data-flags]:before {content: ''; position: absolute; top: 0; height: 100%; right: -1em; width: 0.5em; background-color: dodgerblue}
+	body.private .widget[data-flags]:hover:after {content: attr(data-flags); position: absolute; right: -1em; width: auto; top: 0; height: auto; padding: 0.25em 0.5em; background-color: dodgerblue; color: white; z-index: 3; border-top-left-radius: 1em; border-bottom-left-radius: 1em; font-family: var(--font-family)}
+	body.private .webpage.can-edit:hover {width: calc(100% + 2em); margin-left: -1em; padding: 0 1em}
+	body.private .audio.can-edit:hover {width: calc(100% + 2em); margin-left: -1em; padding: 0 1em}
+
+	/*
+  div.question {border: 2px gray solid; border-radius: 1em; text-align: left; padding: 1em; background-color: white}
+  div.question a.check {display: block; font-size: 80%; text-align: right; padding: 5px}
+  div.question div.result {text-align: left; padding: 0 5px}
+  div.question a.q {display: block; text-align: left; padding: 5px; color: black; cursor: text}
+  div.question div.a {display: block; text-align: left; padding: 5px}
+  div.question div.a.hidden {display: none}
+  div.question a.o {display: block; text-align: left; padding: 5px; color: black; border: thin blue dashed; margin: 0.5em auto 0 auto; padding-right: 1em; border-left: 10px lightgray solid}
+  div.question a.o.sel {background-color: red; color: white}
+  div.question a.o.sel:after {content: '\2717'; position: absolute; top: 5px; right: 5px}
+  div.question a.o.sel.correct {background-color: green; color: white}
+  div.question a.o.sel.correct:after {content: '\2713'; float: right;}
+	table.question td.edit {width: 2em; text-align: center !important}
+	table.question a.edit,
+	table.question a.copy {display: inline-block; width: 1.5em; line-height: 1.5em; border-radius: 100%; background-color: rgb(230,230,230); color: black}
+	.answer {margin-top: 0.4em; background-color: white; padding: 0.75em; border: medium gray solid; border-radius: 0.5em}
+  table.itemAnswers {display: none}
+  .markupResult div.flashcards {display: table; width: 300px; height: 200px; border: medium gray solid; border-radius: 1em; margin: 2em auto; padding: 0; cursor: pointer}
+  .markupResult div.flashcards div.card {display: table-row}
+  .markupResult div.flashcards div.cardNum {position: absolute; left: 5px; top: 5px}
+  .markupResult div.flashcards div.side {display: table-cell; width: 100%; height: 100%; vertical-align: middle; font-size: 200%}
+  .markupResult div.flashcards div.side.off {display: none}
+  .markupResult div.question {border: 2px gray solid; border-radius: 1em; text-align: left; padding: 1em; background-color: white}
+  .markupResult div.question a.check {display: block; font-size: 80%; text-align: right; padding: 5px}
+  .markupResult div.question div.result {text-align: left; padding: 0 5px}
+  .markupResult div.question a.q {display: block; text-align: left; padding: 5px; color: black; cursor: text}
+  .markupResult div.question div.a {display: block; text-align: left; padding: 5px}
+  .markupResult div.question div.a.hidden {display: none}
+  .markupResult div.question a.o {display: block; text-align: left; padding: 5px; color: black; border: thin blue dashed; margin: 0.5em auto 0 auto; padding-right: 1em; border-left: 10px lightgray solid}
+  .markupResult div.question a.o.sel {background-color: red; color: white}
+  .markupResult div.question a.o.sel:after {content: '\2717'; position: absolute; top: 5px; right: 5px}
+  .markupResult div.question a.o.sel.correct {background-color: green; color: white}
+  .markupResult div.question a.o.sel.correct:after {content: '\2713'; float: right;}
+	 */
+	
+	.widget.group.display-slides {white-space: nowrap; padding: 1em; overflow-x: hidden}
+	.widget.group.display-slides .gap {display: none}
+	.widget.group.display-slides .widget {display: inline-block; white-space: normal; /*visibility: hidden*/}
+	.widget.group.display-slides .widget:nth-of-type(2) {visibility: visible}
+	
+	/** Elements **/
+ 	.asterisk {display: none}
+	a {color: blue}
+	
+	/** People roles **/
+	table.people {width: 100%}
+	table.people td, th {border: thin lightgray solid; padding: 0.4em; background-color: white}
+	table.people th {background-color: whitesmoke; text-align: left; padding: 0.4em}
+	table.people td.person {text-align: left}
+	table.people td.email {text-align: left}
+	table.people td.role {width: 4em; text-align: center}
+	table.people td.role.soft {background-color: lightgray; color: black}
+	table.people td.role.hard {background-color: gray; color: white}
+	table.people td.role.processing {background-color: lightgray}
+	table.people tr[id]:hover {outline: medium var(--outline-color) dashed}
+
+	/** GoButtons **/
+	div.goButtons {position: fixed; top: 80px; right: 20px; text-align: right; z-index: 2}
+	/*div.goButtons.bottom {top: auto; bottom: 20px}*/
+  div.goButtons a,
+  div.goButtons button
+    {display: inline-block; width: 1.5em; height: 1.5em; line-height: 1.5em; border: none; border-radius: 100%; background-color: var(--banner-background-color); color: var(--banner-color); cursor: pointer; font-size: 150%; text-align: center; vertical-align: middle}
+	div.goButtons a i.material-icons {vertical-align: middle}
+  div.goButtons * + a,
+  div.goButtons * + button {margin-left: 10px}
+  /*div.goButtons p {background-color: crimson; color: white; padding: 0.5em; margin-bottom: 0.5em; border-radius: 0.5em}*/
+	div.goButtons :disabled {background-color: rgb(230,230,230); cursor: default}
+	
+	/** Recycling bin **/
+	#bin {display: none; position: fixed; top: auto; bottom: 20px; right: 20px; width: 1em; height: 1em; line-height: 1em; text-align: center; z-index: 20; font-size: 200%; padding: 0.5em; border: thin var(--nav-item-color) solid; border-radius:100%; background-color: var(--nav-background-color); color: var(--nav-item-color); opacity: 0.75}
+	body:not(.public) #bin {display: block}
+	#bin:hover {outline: thin var(--outline-color) dashed}
+		
+	/** Slow edit **/
+	#slowOverlay {display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 5; background-color: rgba(0,0,0,0.75); text-align: center}
+	#slowContent {display: inline-block; width: 90%; max-width: 50em; margin: auto; top: 2.5%; height: 95%; font-family: 'Source Code Pro'; font-size: 12pt; font-weight: 400; background-color: white}
+	#slowText {position: absolute; box-sizing: border-box; top: 0; bottom: 40px; height: calc(100% - 40px); left: 0; right: 0; width: 100%; resize: none; padding: 2em; border: none; white-space: pre-wrap; font-family: inherit; font-size: inherit; font-weight: inherit; color: black;}
+	#slowText:focus {outline: none}
+	#slowButtons {position: absolute; box-sizing: border-box; bottom: 0; height: 40px; line-height: 40px; left: 0; right: 0; width: 100%; background-color: var(--nav-background-color); text-align: center; padding: 5px; border: none; border-top: thin black solid}
+	#slowButtons button {display: inline-block; vertical-align: top; border-radius: 0.5em; width: 4em; height: 30px; padding: 4px 8px; background-color: var(--banner-background-color); color: var(--banner-color); border: none; cursor: pointer; font-size: 20px}
+	#slowButtons button.disabled {opacity: 0.3; /*background-color: lightgray; cursor: default*/}
+	#slowButtons button + button {margin-left: 0.5em}
+	
+	/** Slideshow **/
+	#slideOverlay {display: none; position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; background-color: var(--page-background-color)}
+	#slideContent {position: absolute; top: 0; left: 0; max-width: 90%; box-sizing: border-box}
+	#slideCounter {display: none; position: absolute; top: 0; bottom: 0; right: 0; width: 2em; background-color: var(--nav-background-color)}
+	main.slideMode .page {position: absolute; left: 0; right: 0; top: 0; bottom: 0}
+	main.slideMode .page-name,
+	main.slideMode .gap {display: none}
+	main.slideMode .widget {position: absolute; display: none}
+	main.slideMode .currentSlide {display: block; top: 0; left: 0; max-width: 90%}
+	
+	/** Animations **/
+	@keyframes spin {from {transform: rotate(0deg)} to {transform: rotate(360deg)}}
+}
+
+@media screen and (min-width: 1100px) {
+	#icon {display: inline-block}
+	#hamburger {display: none}
+	main {left: var(--nav-width)}
+}
+
+@media screen and (max-width: 1100px) {
+	#icon {display: none}
+	#hamburger {display: inline-block}
+	#nav {z-index: -1; box-shadow: 5px 0 5px gray}
+	main {left: 0}
+}
+
+@media print {
+  @page {margin: 2cm}
+  #banner {display: none}
+  #nav {display: none}
+  main {left: 0}
+	body.public .page.print {display: block !important; max-width: none}
+	body.public .answers.print {display: block !important}	
+	div.goButtons {display: none}
+  a {color: black}
+	.asterisk {display: inline}
+  .noPrint {display: none}
+}
+</style>
+<style>:root{
+  --nav-width: 13em;
+}</style><script src='https://code.highcharts.com/highcharts.js'></script><script src='https://code.highcharts.com/modules/venn.js'></script><script src='https://code.highcharts.com/modules/sankey.js'></script><script src='https://code.highcharts.com/modules/networkgraph.js'></script><script src='https://code.highcharts.com/modules/wordcloud.js'></script><script>
+var ajax = {};
+ajax.request = function(url, data, callback, type=null){
+	var method = data ? 'POST' : 'GET';
+  var req = new XMLHttpRequest();
+	if (type) req.responseType = type;
+  if (callback) req.onreadystatechange = function(){if (req.readyState === 4 && req.status === 200) callback(req);};
+  req.open(method, url, true);
+  if (method === 'GET') req.send();
+	else req.send(data);
+};
+</script>
+<script>
+window.addEventListener('load', function(){
+	document.querySelectorAll('textarea[data-editor]').forEach(function(elt){
+		var editDiv = document.createElement("div");
+		editDiv.style.boxSizing = 'border-box';
+		editDiv.style.width = '100%';
+		editDiv.style.border = 'thin lightgray solid';
+		elt.parentNode.insertBefore(editDiv, elt);
+		elt.style.display = 'none';
+		var editor = ace.edit(editDiv, {
+			value: elt.value,
+			theme: 'ace/theme/textmate',
+			mode: 'ace/mode/'+elt.dataset.mode,
+			minLines: 2,
+			maxLines: 100,
+			tabSize: 2,
+			printMargin: false,
+			fontSize: '90%',
+			wrap: true,
+			highlightActiveLine: false,
+			readOnly: 'readOnly' in elt.dataset,
+			showLineNumbers: false,
+		});
+		editor.on('change', function(){elt.value = editor.getValue(); elt.closest('form').markAsDirty();});
+		if (elt.hasAttribute('autofocus')) editor.focus();
+	});
+});</script>
+<script>
+window.addEventListener('load', function(){
+	document.addEventListener('keydown', function(e) {
+		// Slideshow
+		if (e.target === document.body) {
+			if (e.ctrlKey && e.key === 's') slideshow.toggleMode();
+		}
+		if (slideshow.active) {
+			if (e.key === 'ArrowRight' || e.key === 'ArrowDown') slideshow.showNext();
+			if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') slideshow.showPrevious();
+			if (e.key === 'Escape') slideshow.stop();
+		}
+		// Page navigation
+		if (!slideshow.active && e.target === document.body && !document.body.classList.contains('home')) {
+			if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigation.showNextItem();
+			if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigation.showPreviousItem();
+		}
+		// Cut, copy, paste, delete, toggle
+		if (e.target === document.body && document.body.classList.contains('private')) {
+			if ((e.ctrlKey || e.metaKey) && e.key === 'x') {e.preventDefault(); cutnpaste.cut();}
+			if ((e.ctrlKey || e.metaKey) && e.key === 'c') {e.preventDefault(); cutnpaste.copy();}
+			if ((e.ctrlKey || e.metaKey) && e.key === 'v') {e.preventDefault(); cutnpaste.paste();}
+			if (e.key === 'Escape') {e.preventDefault(); cutnpaste.clear();}
+			if ((e.ctrlKey || e.metaKey) && e.key === 'd') {e.preventDefault(); cutnpaste.delete();}
+			//if (e.key === 'T') {e.preventDefault(); cutnpaste.setSubType('text');}
+			//if (e.key === 'H') {e.preventDefault(); cutnpaste.setSubType('heading');}
+			//if (e.key === 'C') {e.preventDefault(); cutnpaste.setSubType('code');}
+		}
+	});
+});</script>
+<script>
+var navigation = {};
+// Showing and hiding the nav bar
+navigation.showNav = function() {
+	document.getElementById('nav').style.zIndex = 2;
+	document.getElementById('hamburger').onclick = navigation.hideNav;
+	document.getElementById('hamburger').innerHTML = 'close';
+	document.querySelectorAll('#nav, main').forEach(x => x.addEventListener('click', navigation.hideNav));
+};
+navigation.hideNav = function() {
+	document.getElementById('nav').style.zIndex = '';
+	document.getElementById('hamburger').onclick = navigation.showNav;
+	document.getElementById('hamburger').innerHTML = 'menu';
+	document.querySelectorAll('#nav, main').forEach(x => x.removeEventListener('click', navigation.hideNav));
+};
+// Moving between items
+navigation.showItem = function(itemId) {
+	if (document.body.classList.contains('public')) {
+		if (!itemId) itemId = document.querySelector('.nav-item').id;
+		document.querySelectorAll('.page').forEach(elt => elt.style.display = 'none');
+		document.querySelector(".page[id='"+itemId+"']").style.display = 'inline-block';
+		document.querySelectorAll('.nav-item').forEach(elt => elt.classList.remove('on'));
+		document.querySelector(".nav-item[id='"+itemId+"']").classList.add('on');
+		window.location.hash = itemId;
+	}
+	else window.location = "itemView.php?itemId="+itemId;
+};
+navigation.showNextItem = function() {
+	if (slideshow.active) slideshow.showNext();
+	else {
+		var navItem = document.querySelector('.nav-item.on');
+		do {navItem = navItem.nextElementSibling;} while (navItem && navItem.classList.contains('gap'));
+		if (navItem) navigation.showItem(navItem.id);
+	}
+};
+navigation.showPreviousItem = function() {
+	if (slideshow.active) slideshow.showPrevious();
+	else {
+		var navItem = document.querySelector('.nav-item.on');
+		do {navItem = navItem.previousElementSibling;} while (navItem && navItem.classList.contains('gap'));
+		if (navItem) navigation.showItem(navItem.id);
+	}
+};
+window.addEventListener('load', function(){
+	// Activate the nav-items
+	document.querySelectorAll('.nav-item a').forEach(function(elt){
+		elt.addEventListener('click', function(){navigation.showItem(elt.closest('.nav-item').id);});
+	});
+	// Activate the hamburger
+	document.querySelectorAll('#hamburger').forEach(
+		elt => elt.onclick = navigation.showNav
+	);
+	// Make sure selected nav-item is visible
+	if (!document.body.classList.contains('public')) {
+		var selected = document.querySelector('.nav-item.selected');
+		if (selected) {
+			var gapper = document.createElement('DIV');
+			gapper.id = 'gapper';
+			gapper.style.top = -1*(0.5*window.innerHeight) + "px";
+			selected.appendChild(gapper);
+			gapper.scrollIntoView();
+		}
+	}
+});</script>
+<script>
+var slideshow = {};
+slideshow.index = 0;
+slideshow.active = false;
+slideshow.start = function() {
+	document.querySelector('main').classList.add('slideMode');
+	slideshow.widgets = document.querySelectorAll('.page-name, .widget');
+	window.addEventListener('resize', slideshow.showCurrent);
+	slideshow.showCurrent();
+	document.getElementById('showButton').classList.add('on');
+	document.getElementById('showButton').onclick = slideshow.stop;
+	slideshow.active = true;
+};
+slideshow.showCurrent = function() {
+	var current = slideshow.widgets[slideshow.index];
+	if (current) {
+		slideshow.widgets.forEach(x => x.classList.remove('currentSlide'));
+		current.classList.add('currentSlide');
+		slideshow.fitToParent(current);
+	}
+};
+slideshow.showNext = function() {
+	if (slideshow.index < (slideshow.widgets.length - 1)) slideshow.index ++;
+	slideshow.showCurrent();
+};
+slideshow.showPrevious = function() {
+	if (slideshow.index > 0) slideshow.index --;
+	slideshow.showCurrent();
+};
+slideshow.stop = function() {
+	slideshow.widgets.forEach(function(x){
+		x.style.left = '';
+		x.style.top = '';
+		x.style.fontSize = '';
+	});
+	document.querySelector('main').classList.remove('slideMode');
+	window.removeEventListener('resize', slideshow.showCurrent);
+	document.getElementById('showButton').classList.remove('on');
+	document.getElementById('showButton').onclick = slideshow.start;
+	slideshow.active = false;
+};
+slideshow.toggleMode = function() {
+	if (document.getElementById('showButton')) document.getElementById('showButton').click();
+}
+slideshow.fitToParent = function(elt){
+	var parentWidth = elt.parentElement.clientWidth;
+	var parentHeight = elt.parentElement.clientHeight;
+	fontFactor = 0.04; 
+	var fontSize = Math.round(Math.max(parentWidth*fontFactor, parentHeight*fontFactor));
+	elt.style.fontSize = fontSize + 'px';
+	while ((elt.offsetWidth > (parentWidth * 0.9) || elt.offsetHeight > (parentHeight * 0.9)) && fontSize >= 5) {
+		fontSize = fontSize - 1;
+		elt.style.fontSize = fontSize + 'px';
+	}
+	elt.style.left = Math.round((parentWidth - elt.offsetWidth)/2) + 'px';
+	elt.style.top = Math.round((parentHeight - elt.offsetHeight)/2) + 'px';
+};
+</script>
+<script>
+var widgets = {};
+window.addEventListener('load', function(){
+	// Set Highcharts options
+	if (typeof Highcharts !== 'undefined') Highcharts.setOptions({
+		credits: {enabled: false},
+		title: {text: undefined},
+		style: {fontFamily: 'inherit'},
+		/*animation: false,*/
+		plotOptions: {series: {animation: false}},
+	});
+	// Process widgets
+	document.querySelectorAll('.widget').forEach(function(elt){
+		widgets.process(elt);
+	});
+});
+widgets.process = function(widget){
+	// Textareas
+	//widget.querySelectorAll('textarea').forEach(x => x.tabify());
+	// Links
+	widget.querySelectorAll("a[href^='http']").forEach(x => x.setAttribute('target', '_blank'));
+	// Toggles
+	widget.querySelectorAll('div.toggle').forEach(function(tog){
+		tog.querySelector('div').classList.add('on');
+		tog.addEventListener('click', function(){
+			this.querySelectorAll('div').forEach(function(div){div.classList.toggle('on');});
+		});
+	});
+	// Flashcards
+	if (widget.classList.contains('flashcards')) {
+		var table = widget.querySelector('table');
+		var progress = widget.querySelector('progress');
+		var min = widget.querySelector('.min');
+		table.cardNum = 1;
+		table.side = 'f';
+		table.show = function() {
+			table.querySelectorAll('td.active').forEach(x => x.classList.remove('active'));
+			var row = table.querySelectorAll('tr')[table.cardNum - 1];
+			if (table.side === 'f') row.querySelector('td:first-child').classList.add('active');
+			else row.querySelector('td:nth-child(2)').classList.add('active');
+			progress.value = table.cardNum-1;
+			min.innerHTML = table.cardNum;
+		};
+		table.shuffle = function(){
+			var tableBody = table.querySelector('tbody') || table;
+			for (let row of tableBody.querySelectorAll('tr')) {
+				if (Math.random() < 0.25) tableBody.prepend(row);
+				else tableBody.append(row);
+			}
+			table.cardNum = 1;
+			table.side = 'f';
+			table.show();
+		};
+		widget.querySelectorAll('button').forEach(
+			x => x.addEventListener('dblclick', function(e){e.preventDefault(); e.cancelBubble = true;})
+		);
+		widget.querySelector('button.grid').addEventListener('click', function(){
+			table.classList.toggle('practice');
+		});
+		widget.querySelector('button.shuffle').addEventListener('click', function(){
+			table.shuffle();
+		});
+		widget.querySelector('button.forward').addEventListener('click', function(){
+			if (table.side === 'f') table.side = 'b';
+			else {
+				table.side = 'f';
+				table.cardNum++;
+				if (table.cardNum > widget.querySelector('progress').getAttribute('max')) table.cardNum = 1;
+			}
+			table.show();
+		});
+		widget.querySelector('button.back').addEventListener('click', function(){
+			table.side = 'f';
+			table.cardNum--;
+			if (table.cardNum < 1) table.cardNum = 1; /*widget.querySelector('progress').getAttribute('max')*/
+			table.show();
+		});
+		table.shuffle();
+	}
+	// Questions
+	widget.querySelectorAll('div.question').forEach(function(question){
+		var options = question.querySelectorAll('a.o');
+		if (options.length === 0) {
+			question.querySelector('a.q').addEventListener('click', function(){
+				question.querySelector('div.a').classList.toggle('hidden');
+			});
+			question.querySelector('a.q').style.color = 'blue';
+			question.querySelector('a.q').style.cursor = 'pointer';
+		}
+		else {
+			options.forEach(function(option){
+				if (Math.random() < 0.5) question.insertBefore(option, question.querySelector('a.check'));
+				else question.insertBefore(option, question.querySelector('a.o'));
+				option.addEventListener('click', function(){
+					var isOn = option.classList.contains('sel');
+					question.querySelectorAll('a.o').forEach(elt => elt.classList.remove('sel'));
+					if (!isOn) option.classList.toggle('sel');
+				});
+			});
+		}
+	});
+	// Highcharts
+	if (widget.classList.contains('highchart')) {
+		var optionsElt = widget.querySelector('.options');
+		var resultElt = widget.querySelector('.result');
+		try {
+			var options = eval("(" + optionsElt.innerHTML.trim() + ")");
+			Highcharts.chart(resultElt, options);
+		} catch(e) {resultElt.innerHTML = e;}
+	}
+	// Webpages
+	if (widget.classList.contains('webpage') && (widget.classList.contains('location-code') || widget.classList.contains('location-file'))) {
+		var iframe = widget.querySelector('iframe');
+		widget.style.height = (iframe.contentWindow.document.body.offsetHeight+20)+'px';
+	}
+	// Wordclouds
+	if (widget.classList.contains('wordcloud')) {
+		var obj;
+		try {obj = eval("({"+widget.innerHTML+"})");}
+		catch(e) {
+			obj = {};
+			var words = widget.innerHTML.split(/[,\. ]+/g);
+			for (let word of words) obj[word] = obj[word] ? obj[word] + 1 : 1;
+		}
+		finally {
+			var data = [];
+			for (let prop in obj) data.push({name: prop, weight: obj[prop]});
+			var options = {title: {text: ''}, series: [{type: 'wordcloud', data: data}]};
+			Highcharts.chart(widget, options);
+		}
+	}
+	//Code
+	if (widget.classList.contains('code') /*&& widget.classList.contains('runnable')*/) {
+		var runElt = widget.querySelector('button.run');
+		var clearElt = widget.querySelector('button.clear');
+		var codeElt = widget.querySelector('textarea');
+		var resultElt = widget.querySelector('output');
+		var language = widget.getAttribute('data-language');
+		// Use the Ace editor
+		var editor = ace.edit(codeElt, {
+			theme: 'ace/theme/textmate',
+			mode: 'ace/mode/'+language,
+			minLines: 1,
+			maxLines: 100,
+			tabSize: 2,
+			printMargin: false,
+			fontSize: '90%',
+			highlightActiveLine: false,			
+			wrap: true,
+			showLineNumbers: false,
+		});
+		if (runElt) runElt.addEventListener('click', function(){
+			resultElt.style.display = 'block';
+			clearElt.style.display = 'inline';
+			var code = editor.getValue();
+			if (language === 'svg') {
+				resultElt.innerHTML = code;
+			}
+			else if (language === 'latex') {
+				katex.render(code, resultElt, {
+					throwOnError: false,
+					displayMode: 'display',
+				});
+				editor.focus();
+			}
+			else if (language === 'html') {
+				var iframe = document.createElement('iframe');
+				iframe.srcdoc = code;
+				resultElt.innerHTML = '';
+				resultElt.appendChild(iframe);
+				iframe.height = (iframe.contentWindow.document.body.scrollHeight)+'px';
+				//resultElt.style.height = (iframe.contentWindow.document.body.offsetHeight)+'px';
+			}
+			else if (language === 'highcharts') {
+				try {
+					var options = eval("(" + code.trim() + ")");
+					Highcharts.chart(resultElt, options);
+				} catch(e) {resultElt.innerHTML = e;}
+			}
+			else if (language === 'matplot') {
+				try {
+					var options = eval("(" + code.trim() + ")");
+					matplot.plot(resultElt, options);
+				} catch(e) {resultElt.innerHTML = e;}
+			}
+			else if (language === 'toe') {
+				//try {
+					var options = eval("(" + code.trim() + ")");
+					toe.calculate(resultElt, options);
+				//} catch(e) {resultElt.innerHTML = e;}
+			}
+			else if (language === 'javascript') {
+				resultElt.innerHTML = '';
+				var iframe = document.createElement('iframe');
+				resultElt.appendChild(iframe);
+
+				var errScript = iframe.contentWindow.document.createElement('script');
+				errScript.appendChild(iframe.contentWindow.document.createTextNode(
+					"window.onerror=function(msg, url, lineno){document.write(msg+' in line '+lineno+'.')}"
+				));
+				iframe.contentWindow.document.documentElement.appendChild(errScript);
+				
+				var script = iframe.contentWindow.document.createElement('script');
+				script.appendChild(iframe.contentWindow.document.createTextNode(
+					"try{"+code+"}catch(e){document.write(e+'.')}"
+				));
+				iframe.contentWindow.document.documentElement.appendChild(script);
+				var style = iframe.contentWindow.document.createElement('style');
+				style.appendChild(iframe.contentWindow.document.createTextNode("*{font-family: monospace; font-size: 12pt; white-space: pre-wrap}"));
+				iframe.contentWindow.document.documentElement.appendChild(style);
+			}
+			else if (language === 'markdown' || language === 'mysql' || language === 'linux') {
+				resultElt.innerHTML = 'Running code...';
+				let data = new FormData();
+				data.append('language', language);
+				data.append('code', code);
+				ajax.request('https://slave.itsy.tech/runCode.php', data, function(req){
+					resultElt.innerHTML = req.responseText;
+					if (language === 'markdown') {
+						renderMathInElement(resultElt, {
+							delimiters: [
+								{left: '$$', right: '$$', display: true},
+								{left: '$', right: '$', display: false},
+							],
+							throwOnError: false
+						});
+					}
+					editor.focus();
+				});
+			}
+			else if (language === 'python' || language === 'r') {
+				resultElt.innerHTML = 'Running code...';
+				let data = new FormData();
+				data.append('language', language);
+				data.append('code', code);
+				ajax.request('https://slave.itsy.tech/runCode.php', data, function(req){
+					var output = JSON.parse(req.getResponseHeader("output"));
+					var fileName = req.getResponseHeader("fileName");
+					var mimeType = req.getResponseHeader("Content-Type");
+					var blob = window.URL.createObjectURL(req.response);
+					resultElt.innerHTML = output;
+					if (mimeType.startsWith('image/')) {
+						var img = document.createElement('img');
+						img.src = blob;
+						//img.style.cssText = "height:50vh; width:auto; display:block; margin:0 auto";
+						//img.style.cssText = "width:100%;height:auto";
+						//img.onload = function(){this.style.height = this.contentWindow.document.documentElement.scrollHeight+'px';};
+						//img.onload = function(){this.style.height = this.scrollHeight+2+'px';};
+						resultElt.appendChild(img);
+						//resultElt.style.height = resultElt.scrollHeight+'px';
+						var link = document.createElement('a');
+						link.href = blob;
+						//link.onclick = function(){img.style.height = img.contentWindow.document.documentElement.scrollHeight+10+'px';};
+						link.download = fileName;
+						link.innerHTML = 'Download';
+						resultElt.appendChild(link);
+					}
+					else {
+						var link = document.createElement('a');
+						link.href = blob;
+						link.target='_blank';
+						link.innerHTML = fileName;
+						resultElt.appendChild(link);
+					}
+					//codeElt.focus();
+					if (language === 'markdown') renderMathInElement(resultElt, {
+						delimiters: [
+							{left: '$$', right: '$$', display: true},
+							{left: '$', right: '$', display: false},
+						],
+						throwOnError: false
+					});
+					editor.focus();
+				}, "blob");
+			}
+		});
+		if (clearElt) clearElt.addEventListener('click', () => {resultElt.style.display = 'none'; clearElt.style.display = 'none';});
+	}
+	//JS
+	widget.querySelectorAll('div.js').forEach(function(div){
+		var runElt = div.querySelector('a.jsRun');
+		var codeElt = div.querySelector('textarea.jsCode');
+		var resultElt = div.querySelector('div.jsResult');
+		//codeElt.tabify();
+		//codeElt.style.height = '1em'; codeElt.style.height = codeElt.scrollHeight+'px';
+		//codeElt.addEventListener('input', function(){codeElt.style.height = '1em'; codeElt.style.height = codeElt.scrollHeight+'px';});
+		runElt.addEventListener('click', function(){
+			resultElt.style.display = 'block';
+			runJS(codeElt.value, resultElt);
+		});
+	});
+	// Group - slide display
+	if (widget.classList.contains('group') && widget.classList.contains('display-slides')) {
+		widget.currentNum = 0;
+		widget.subWidgets = widget.querySelectorAll('.widget');
+		widget.addEventListener('click', function(){
+			widget.currentNum++;
+			if (widget.currentNum === widget.subWidgets.length) widget.currentNum = 0;
+			widget.subWidgets.forEach(function(x){
+				x.style.left = (-1 * widget.currentNum * x.getBoundingClientRect().width)+'px';
+			});
+		});
+	}
+	//Slides
+	widget.querySelectorAll('div.slides').forEach(function(slidesElt){
+		var slides = slidesElt.querySelectorAll('div.slide');
+		var maxHeight = 0;
+		slides.forEach(function(elt){maxHeight = Math.max(maxHeight, elt.clientHeight);});
+		slidesElt.style.minHeight = maxHeight + 'px';
+		slidesElt.showSlide = function(num){
+			slidesElt.num = num;
+			slidesElt.querySelector('div.slideNum').innerHTML = (num+1) + " of " + slides.length;
+			for (let i = 0; i < slides.length; i++) {
+				if (i === num) slides[i].classList.remove('off');
+				else slides[i].classList.add('off');
+			}
+		};
+		slidesElt.showSlide(0);
+		slidesElt.addEventListener('click', function(){
+			var newNum = slidesElt.num + 1;
+			if (newNum >= slides.length) newNum = 0;
+			slidesElt.showSlide(newNum);
+		});
+	});
+	//Flashcards
+	widget.querySelectorAll('div.flashcards').forEach(function(flashcardsElt){
+		var sides = flashcardsElt.querySelectorAll('div.side');
+		flashcardsElt.shuffle = function(){
+			flashcardsElt.querySelectorAll('div.card').forEach(function(card){
+				if (Math.random() < 0.5) flashcardsElt.appendChild(card);
+				else flashcardsElt.insertBefore(card, flashcardsElt.firstElementChild);
+			});
+		};
+		flashcardsElt.showSide = function(num){
+			flashcardsElt.num = num;
+			flashcardsElt.querySelector('div.cardNum').innerHTML = (Math.floor(num/2) + 1) + " of " + sides.length/2;
+			for (var i = 0; i < sides.length; i++) {
+				if (i === num) sides[i].classList.remove('off');
+				else sides[i].classList.add('off');
+			}
+		};
+		flashcardsElt.shuffle();
+		flashcardsElt.showSide(0);
+		flashcardsElt.addEventListener('click', function(){
+			var newNum = flashcardsElt.num + 1;
+			if (newNum >= sides.length) newNum = 0;
+			flashcardsElt.showSide(newNum);
+		});
+	});
+};</script>
+
+				<script>
+					window.addEventListener('load', function(){
+						if (window.location.hash) navigation.showItem(window.location.hash.substr(1));
+						else navigation.showItem();
+					});
+				</script>	<!-- Ace code editor -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ace.js'></script>
+	<!-- KaTex -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css" integrity="sha384-Um5gpz1odJg5Z4HAmzPtgZKdTBHZdw8S29IecapCSB31ligYPhHQZMIlWLYQGVoc" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js" integrity="sha384-YNHdsYkH6gMx9y3mRkmcJ2mFUjTd0qNQQvY9VYZgQd7DcN7env35GzlmFaZ23JGp" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+	<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+						delimiters: [
+								{left: '$$', right: '$$', display: true},
+								{left: '$', right: '$', display: false},
+						],
+						throwOnError: false
+					});
+			});
+	</script>
+</head>
+<body class='public'>
+  <div id='banner'>
+	<img id='icon' src='https://itsy.tech/sites/ace228e61e07b3095c2c63df4f93e89d.ico' /><i id='hamburger' class='material-icons'>menu</i><a id='site-name' href='itemView.php?itemId=16442'>Tutorial: LaTeX</a><div id='actions'></div></div>
+  <div id='nav'>
+	<div class='nav-item home on can-edit' id='16442' style='margin-left:0'><a>Home</a></div><div class='gap can-add' pageId='16442' parentId='16442' type='p' number='1' style='margin-left:0em'>&nbsp;</div><div class='nav-item  can-edit' id='16444' style='margin-left:0em'><a>Using LaTeX</a></div><div class='gap can-add' pageId='16442' parentId='16442' type='p' number='3' style='margin-left:0em'>&nbsp;</div><div class='nav-item  can-edit' id='16445' style='margin-left:0em'><a>The building blocks</a></div><div class='gap can-add' pageId='16442' parentId='16442' type='p' number='5' style='margin-left:0em'>&nbsp;</div><div class='nav-item  can-edit' id='16446' style='margin-left:0em'><a>Combinations</a></div><div class='gap can-add' pageId='16442' parentId='16442' type='p' number='7' style='margin-left:0em'>&nbsp;</div><div class='nav-item  can-edit' id='16800' style='margin-left:0em'><a>Scratchpads</a></div><div class='gap can-add' pageId='16442' parentId='16442' type='p' number='9' style='margin-left:0em'>&nbsp;</div><div class='nav-item  can-edit' id='16448' style='margin-left:0em'><a>A useful guide</a></div><div class='gap can-add' pageId='16442' parentId='16442' type='p' number='1000' style='margin-left:0'>&nbsp;</div></div>  <main id='main'>
+		<!-- Page(s) -->
+		
+<div class="page can-edit" id="16442">
+<div class="page-name">Home</div>
+<div class="gap can-add" parentId="16442" type="w" number="1">&nbsp;</div>
+<div class="widget text can-edit" id="16773">
+<p>Mathematics involves many symbols and layouts that are easy to write by hand but difficult to produce using a keyboard and mouse. For example:</p>
+<p>$$ -b \pm \sqrt{b^2 -4ac} \over 2a $$</p>
+<p>One technique is to use a <strong>wysiwyg editor</strong> (&quot;what you see is what you get&quot;), such as the one that comes with Microsoft Word. Wysiwyg editors are good for the occasional piece of simple mathematics, but they are unwieldy for more extensive and complex mathematics. </p>
+<p>Many mathematicians and scientists prefer to use a <strong>markup language</strong>, which allows them to type mathematics using plain text and have it automatically rendered into the appropriate symbols and layouts.</p>
+<p>One such language is <strong>TeX</strong> (pronounced &quot;tek&quot;), developed in the 1970s by computer scientist and mathematician Donald Knuth. An easier-to-use and more popular version is <strong>LaTeX</strong> (pronounced &quot;lay tek&quot;), developed in the 1980s by computer scientist Leslie Lamport.</p>
+<p>Here's how we might use LaTeX to write the expression above:</p>
+</div>
+<div class="gap can-add" parentId="16442" type="w" number="3">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16772">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>-b \pm \sqrt{b^2 - 4ac} \over 2a</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16442" type="w" number="5">&nbsp;</div>
+<div class="widget text can-edit" id="16443">
+<p>This might seem daunting, but once you get the hang of it you'll find it pretty intuitive. Notice that if you read the mathematical expression at the top of this page out loud, and then read the snippet of LaTeX out loud, you say much the same thing. This is no accident - LaTeX is designed to be written in the way we naturally read and speak mathematics.</p>
+<p>Using LaTeX has many advantages - it's worth taking some time to learn it.</p>
+</div>
+<div class="gap can-add" parentId="16442" type="w" number="7">&nbsp;</div>
+</div>
+<div class="page can-edit" id="16444">
+<div class="page-name">Using LaTeX</div>
+<div class="gap can-add" parentId="16444" type="w" number="1">&nbsp;</div>
+<div class="widget text can-edit" id="16453">
+<p>Many web applications allow you to add LaTeX to your regular text, simply by enclosing it in dollar signs. Browsers will automatically convert your LaTeX into the appropriate symbols and layout.</p>
+<p>Depending on how you want your mathematics to be displayed, you can use either <strong>single dollar signs</strong> or <strong>double dollar signs</strong>.</p>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="3">&nbsp;</div>
+<div class="widget text can-edit" id="16452">
+<h1>Using single dollar signs</h1>
+<p>If you surround your LaTeX with <strong>single dollar signs</strong> it will be displayed <strong>inline</strong>. For example:</p>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="5">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="markdown" id="16775">
+<header><span class="language">markdown</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>The roots of a quadratic equation are given by $-b \pm \sqrt{b^2 - 4ac} \over 2a$.</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="7">&nbsp;</div>
+<div class="widget text can-edit" id="16451">
+<h1>Using double dollar signs</h1>
+<p>If you surround your LaTeX with <strong>double dollar signs</strong> it will be displayed as a <strong>block</strong>, on its own line. For example:</p>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="9">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="markdown" id="16776">
+<header><span class="language">markdown</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>The roots of a quadratic equation are given by:
+$$-b \pm \sqrt{b^2 - 4ac} \over 2a$$</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="11">&nbsp;</div>
+<div class="widget text can-edit" id="16450">
+<h1>Using a mixture</h1>
+<p>You can use a mixture of the two:</p>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="13">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="markdown" id="16777">
+<header><span class="language">markdown</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>The roots of a quadratic equation $ax^2 + bx + c$ are given by:
+$$-b \pm \sqrt{b^2 - 4ac} \over 2a$$</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="15">&nbsp;</div>
+<div class="widget text can-edit" id="16449">
+<h1>Try it yourself</h1>
+<p>See if you can write a mixture of text and LaTeX to produce the following piece of mathematics:</p>
+<blockquote>
+<p>For any numbers $x$ and $y$: $$\sqrt{xy} = \sqrt{x}\sqrt{y}$$</p>
+</blockquote>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="17">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="markdown" id="16778">
+<header><span class="language">markdown</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea></textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16444" type="w" number="19">&nbsp;</div>
+</div>
+<div class="page can-edit" id="16445">
+<div class="page-name">The building blocks</div>
+<div class="gap can-add" parentId="16445" type="w" number="1">&nbsp;</div>
+<div class="widget text can-edit" id="16849">
+<p>LaTeX has basic building blocks that you can combine to express pretty much any piece of mathematics. The following is just a subset, but it should cover many of your needs.</p>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="3">&nbsp;</div>
+<div class="widget text can-edit" id="16808">
+<h1>Numbers</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="5">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16839">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>2, 3.14, -16, ...</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="7">&nbsp;</div>
+<div class="widget text can-edit" id="16809">
+<h1>Variables</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="9">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16838">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>x, y, z, ...</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="11">&nbsp;</div>
+<div class="widget text can-edit" id="16810">
+<h1>Functions</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="13">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16837">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\sin, \log, \exp, ...</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="15">&nbsp;</div>
+<div class="widget text can-edit" id="16811">
+<h1>Text</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="17">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16836">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\text{normal text} \\
+\texttt{typewriter text}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="19">&nbsp;</div>
+<div class="widget text can-edit" id="16780">
+<h1>Greek letters</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="21">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16781">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\alpha, \beta, \gamma, ..., \omega \\
+\Alpha, \Beta, \Gamma, ..., \Omega</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="23">&nbsp;</div>
+<div class="widget text can-edit" id="16812">
+<h1>Special characters</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="25">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16835">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\aleph, \infty, \pm, \to, \circ \\
+\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{R}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="27">&nbsp;</div>
+<div class="widget text can-edit" id="16813">
+<h1>Comparisons</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="29">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16834">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>=, \ne \\
+\lt, \le, \gt, \ge \\
+\approx, \sim</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="31">&nbsp;</div>
+<div class="widget text can-edit" id="16782">
+<h1>Subscripts and superscripts</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="33">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16455">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>x_2, x_{2y}, x_2y \\
+x^2, x^{2y}, x^2y</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="35">&nbsp;</div>
+<div class="widget text can-edit" id="16783">
+<h1>Fractions</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="37">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16784">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\frac{2x}{y}, {2x \over y}, 2{x \over y}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="39">&nbsp;</div>
+<div class="widget text can-edit" id="16814">
+<h1>Sets</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="41">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16833">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\{1, 2, 3\} \emptyset \\
+\in \notin	\\
+\subset \subseteq \\
+\supset \supseteq	\\
+\cap \cup \\
+\bigcap \bigcup \\
+\overline{A}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="43">&nbsp;</div>
+<div class="widget text can-edit" id="16815">
+<h1>Sums and products</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="45">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16832">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\sum \prod</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="47">&nbsp;</div>
+<div class="widget text can-edit" id="16816">
+<h1>Combinations and permutations</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="49">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16831">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>^nP_r, ^nC_r, {n \choose r}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="51">&nbsp;</div>
+<div class="widget text can-edit" id="16817">
+<h1>Logic</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="53">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16830">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\land, \lor \\
+\exists, \forall \\
+\Rightarrow, \Leftarrow, \equiv \\
+\therefore</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="55">&nbsp;</div>
+<div class="widget text can-edit" id="16818">
+<h1>Punctuation</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="57">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16829">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>A \dots B \cdots C</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="59">&nbsp;</div>
+<div class="widget text can-edit" id="16819">
+<h1>Extra spacing</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="61">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16828">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>A B \, C \quad D \qquad E</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="63">&nbsp;</div>
+<div class="widget text can-edit" id="16820">
+<h1>Calculus</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="65">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16827">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\lim_{x \to 1} \\
+f', \frac{dy}{dx}, \frac{\partial y}{\partial x} \\
+\int_0^1</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="67">&nbsp;</div>
+<div class="widget text can-edit" id="16821">
+<h1>Cases</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="69">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16825">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>f(x) =
+\begin{cases}
+  0 & \text{if } x < 2 \\
+  1 & \text{if } x \ge 2 \\
+\end{cases}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="71">&nbsp;</div>
+<div class="widget text can-edit" id="16822">
+<h1>Working</h1>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="73">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16823">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\begin{align}
+  f(x) &= (x - 1)(x + 2) \\
+       &= x^2 + 2x - x - 2 \\
+       &= x^2 + x - 2 \\
+\end{align}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16445" type="w" number="75">&nbsp;</div>
+</div>
+<div class="page can-edit" id="16446">
+<div class="page-name">Combinations</div>
+<div class="gap can-add" parentId="16446" type="w" number="1">&nbsp;</div>
+<div class="widget text can-edit" id="16785">
+<p>You can combine the building blocks of LaTeX to express a wide variety of mathematics. Here are some mathematical facts expressed using LaTeX:</p>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="3">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16786">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>n! = 1 \times 2 \times \cdots \times n</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="5">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16787">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>e^{i\pi} + 1 = 0</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="7">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16789">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>re^{i\theta} = r(\cos\theta + i\sin\theta)</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="9">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16790">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\text{If } x \in \mathbb{Q} \text{ and } y \in \mathbb{Q} \text{ then } xy \in \mathbb{Q}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="11">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16795">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\sum_{k=1}^n k^2 = \frac{1}{6}n(n+1)(2n+1)</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="13">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16791">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\{1,2\} \cap \{2,3\} \cap \{3,4\} = \emptyset</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="15">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16794">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>P(A|B) = \frac{P(A \cap B)}{P(B)} \text{ if } P(B) \ne 0</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="17">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16796">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\lim_{x \to 1} \frac{x^2 - 1}{x - 1} = 2</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="19">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16797">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\frac{d}{dx} \sin(x)\cos(x) = \sin(x)\frac{d}{dx}\cos(x) + \cos(x)\frac{d}{dx}\sin(x)</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="21">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16798">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea>\int_0^\infty e^{-x^2} dx = \frac{\sqrt\pi}{2}</textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16446" type="w" number="23">&nbsp;</div>
+</div>
+<div class="page can-edit" id="16800">
+<div class="page-name">Scratchpads</div>
+<div class="gap can-add" parentId="16800" type="w" number="1">&nbsp;</div>
+<div class="widget text can-edit" id="16802">
+<p>You can use the following scratchpads to experiment with LaTeX.</p>
+<p>If you'd like to write pure LaTeX, without having to use dollars signs, use this scratchpad:</p>
+</div>
+<div class="gap can-add" parentId="16800" type="w" number="3">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="latex" id="16803">
+<header><span class="language">latex</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea></textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16800" type="w" number="5">&nbsp;</div>
+<div class="widget text can-edit" id="16860">
+<p>If you'd like to write a mixture of text and LaTeX, by enclosing each piece of LaTeX in single or double dollar signs, use this scratchpad:</p>
+</div>
+<div class="gap can-add" parentId="16800" type="w" number="7">&nbsp;</div>
+<div class="widget code runnable can-edit" data-language="markdown" id="16861">
+<header><span class="language">markdown</span><button class="clear">Clear</button><button class="run">Run</button></header>
+<textarea></textarea>
+<output></output>
+</div>
+<div class="gap can-add" parentId="16800" type="w" number="9">&nbsp;</div>
+</div>
+<div class="page can-edit" id="16448">
+<div class="page-name">A useful guide</div>
+<div class="gap can-add" parentId="16448" type="w" number="1">&nbsp;</div>
+<div class="widget text can-edit" id="16807">
+<p>The following guide by Dave Richeson gives a clear and concise summary of all of the LaTeX you'll probably ever need:</p>
+<p><a href="http://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf">A quick guide to LaTeX</a></p>
+</div>
+<div class="gap can-add" parentId="16448" type="w" number="3">&nbsp;</div>
+</div>
+		<!-- Bin -->
+		<a href='itemBin.php?itemId=16442' class='noPrint'><i class='material-icons' id='bin'>delete</i></a>
+		<!-- Slideshow -->
+		<div id='slideOverlay'>
+			<div id='slideContent'></div>
+			<div id='slideCounter'></div>
+		</div>
+	</main>
+	<!-- Slow edit -->
+	<div id='slowOverlay' class='noPrint'>
+		<div id='slowContent'>
+			<textarea id='slowText' class='input notAutosize' tabindex='-1'></textarea>
+			<div id='slowButtons'>
+				<button id='slowSave' class='disabled'><i class='material-icons'>save</i></button>
+				<button id='slowSaveClose' class='disabled'><i class='material-icons'>done</i></button>
+				<button id='slowClose'><i class='material-icons'>close</i></button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
