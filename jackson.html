@@ -1,0 +1,137 @@
+<!doctype html> 
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jackson</title>
+    <style>
+      @media all {
+        body {font-family: Helvetica, Arial, sans-serif; font-weight: 300;}
+        header {padding: 0.5em 0; border-bottom: thin gray solid;}
+        h1 {font-weight: 500; font-size: 200%;}
+        h2 {font-weight: 500; font-size: 140%;}
+        td {padding: 4px; text-align: right; border: thin lightgray solid}
+        table {border-collapse: collapse;}
+        tr:first-child td {background-color: whitesmoke}
+        .targets tr:last-child td {border-top-width: medium;}
+        .targets td:first-child {text-align: left;}
+        .teaching td:first-child {text-align: left;}
+        .teaching td:nth-child(2) {text-align: left;}
+      }
+      @media print {
+        @page {size: landscape; margin: 10mm;}
+        html, body {width: 297mm; height: 210mm}
+        header {display: none}
+        .person + .person {page-break-before: always}
+      }
+    </style>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.mini.min.js"></script>
+  </head>
+  <body>
+    <header><input type="file" onchange="loadData(this)"></header>
+    <main></main>
+  </body>
+</html>
+<script>
+  async function loadData(elt) {
+    const file = elt.files[0];
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data);
+    const people = XLSX.utils.sheet_to_json(wb.Sheets.People, {range: 1}).filter(x => x.ReverseName > "");
+    const teaching = XLSX.utils.sheet_to_json(wb.Sheets.Teaching, {range: 1}).filter(x => x.Person > "");
+    people.forEach(person => {
+      const tetp = person["Teaching Target%"];
+      const tetw = person["Teaching TargetWks"];
+      const teaw = person["Teaching ActualWks"];
+      const tevw = teaw - tetw;
+      const rstp = person["Research/Sup Target%"];
+      const rstw = person["Research/Sup TargetWks2"];
+      const rsaw = person["Research ActualWks"];
+      const rsvw = rsaw - rstw;
+      const letp = person["LE Target%"];
+      const letw = person["LE TargetWks"];
+      const leaw = person["LE ActualWks"];
+      const levw = leaw - letw;
+      const totp = tetp + rstp + letp;
+      const totw = tetw + rstw + letw;
+      const toaw = teaw + rsaw + leaw;
+      const tovw = toaw - totw;
+      // Heading
+      let result = `<div class="person">`;
+      result += `<h1>${person.FirstName} ${person.LastName} 2023 Workload</h1>`;
+      // Summary
+      result += `<h2>Targets</h1>`;
+      result += `<table class="targets">`;
+      result += `<tr>`;
+      result += `<td>Category</td>`;
+      result += `<td>Target Percent</td>`;
+      result += `<td>Target Weeks</td>`;
+      result += `<td>Actual Weeks</td>`;
+      result += `<td>Variance Weeks</td>`;
+      result += `</tr>`;
+      result += `<tr>`;
+      result += `<td>Teaching</td>`;
+      result += `<td>${tetp.toFixed(0)}%</td>`;
+      result += `<td>${tetw.toFixed(2)}</td>`;
+      result += `<td>${teaw.toFixed(2)}</td>`;
+      result += `<td>${tevw.toFixed(2)}</td>`;
+      result += `</tr>`;
+      result += `<tr>`;
+      result += `<td>Research and HDR Supervision</td>`;
+      result += `<td>${rstp.toFixed(0)}%</td>`;
+      result += `<td>${rstw.toFixed(2)}</td>`;
+      result += `<td>${rsaw.toFixed(2)}</td>`;
+      result += `<td>${rsvw.toFixed(2)}</td>`;
+      result += `</tr>`;
+      result += `<tr>`;
+      result += `<td>Leadership and Engagement</td>`;
+      result += `<td>${letp.toFixed(0)}%</td>`;
+      result += `<td>${letw.toFixed(2)}</td>`;
+      result += `<td>${leaw.toFixed(2)}</td>`;
+      result += `<td>${levw.toFixed(2)}</td>`;
+      result += `</tr>`;
+      result += `<tr>`;
+      result += `<td>Total</td>`;
+      result += `<td>${totp.toFixed(0)}%</td>`;
+      result += `<td>${totw.toFixed(2)}</td>`;
+      result += `<td>${toaw.toFixed(2)}</td>`;
+      result += `<td>${tovw.toFixed(2)}</td>`;
+      result += `</tr>`;
+      result += `</table>`;
+      // Teaching details
+      result += `<h2>Teaching allocation (${teaw.toFixed(2)} weeks)</h1>`;
+      result += `<table class="teaching">`;
+      result += `<tr>`;
+      result += `<td>Offering</td>`;
+      result += `<td>Discipline</td>`;
+      result += `<td>Students</td>`;
+      result += `<td>Coord Wks</td>`;
+      result += `<td>Lect Wks</td>`;
+      result += `<td>Tute Wks</td>`;
+      result += `<td>Studio Wks</td>`;
+      result += `<td>WIL Wks</td>`;
+      result += `<td>ISTL Wks</td>`;
+      result += `<td>Devel Wks</td>`;
+      result += `<td>Total Wks</td>`;
+      result += `<tr>`;
+      teaching.filter(x => x.Person === person.ReverseName).forEach(row => {
+        result += `<tr>`;
+        result += `<td>${row.Offering}</td>`;
+        result += `<td>${row.Discipline}</td>`;
+        result += `<td>${row["Num Students"]}</td>`;
+        result += `<td>${row["CoordWks"].toFixed(2)}</td>`;
+        result += `<td>${row["LectureWks"].toFixed(2)}</td>`;
+        result += `<td>${row["TuteWks"].toFixed(2)}</td>`;
+        result += `<td>${row["StudioWks"].toFixed(2)}</td>`;
+        result += `<td>${row["WILWks"].toFixed(2)}</td>`;
+        result += `<td>${row["ISTLWks"].toFixed(2)}</td>`;
+        result += `<td>${row["DevelWks"].toFixed(2)}</td>`;
+        result += `<td>${row["TotalWks"].toFixed(2)}</td>`;
+        result += `</tr>`;
+      });
+      result += `</table>`;
+      result += "</div>";
+      // End
+      document.querySelector("main").innerHTML += result;
+    });
+  }
+</script>
