@@ -1,9 +1,0 @@
-Name,Diameter,Density,Gravity,Velocity,Moons,Rings
-Mercury,4879,5429,3.7,4.3,0,No
-Venus,12104,5243,8.9,10.4,0,No
-Earth,12756,5514,9.8,11.2,1,No
-Mars,6792,3934,3.7,5.0,2,No
-Jupiter,142984,1326,23.1,59.5,79,Yes
-Saturn,120536,687,9.0,35.5,82,Yes
-Uranus,51118,1270,8.7,21.3,27,Yes
-Neptune,49528,1683,11.0,23.5,14,Yes
